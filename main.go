@@ -8,6 +8,8 @@ import (
 
 	gin "github.com/gin-gonic/gin"
 	database "github.com/jettspanner123/AICodeWrapperBackend/db"
+
+	routes "github.com/jettspanner123/AICodeWrapperBackend/routes"
 )
 
 func main() {
@@ -19,11 +21,15 @@ func main() {
 		log.Fatal("Error leading enviornment variables! 😭")
 	}
 
+	// MARK: Database Init & Migration
 	database.ConnectToDB()
 	database.MigrateModels()
 
 	// MARK: Application
 	app := gin.Default()
+
+	// MARK: Clustering Routes
+	routes.RegisterAuthRoutes(app)
 
 	app.Run(serverConstants.GetPort())
 }
